@@ -5,4 +5,5 @@
     <string name="AlertNoTitle">Заголовок или содержание заметки отсутствуют</string>
     <string name="AlertSaved">Заметка сохранена</string>
     <string name="AddButtonDescription">addButton</string>
+    <string name="search">Search</string>
 </resources>

@@ -1,9 +1,14 @@
 package com.example.blocknote.db;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import androidx.annotation.NonNull;
+
+import com.example.blocknote.adapter.Note;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,31 +42,33 @@ public class DbManager {
     }
 
     //Вставить значения в таблицу TABLE_TITLE
-    public long insertDb(String title, String description) {
+    public long insertDb(String title, String description, String uri) {
         ContentValues values = new ContentValues();
         values.put(DbConstants.TABLE_TITLE, title);
-        values.put(DbConstants.TABLE_DISCRIPTION, description);
+        values.put(DbConstants.TABLE_DESCRIPTION, description);
+        values.put(DbConstants.TABLE_URI, uri);
 
         return database.insert(DbConstants.TABLE_NAME, null, values);
     }
 
-    //Прочитать строки из таблицы TABLE_TITLE
-    public List<String> readDbValues() {
-        List<String> dbList = new ArrayList<>();
+    //Прочитать заголовки из таблицы TABLE_TITLE
+    public List<Note> readDbValues(String titleFilter) {
+        List<Note> dbList = new ArrayList<>();
 
         String[] projection = {
                 DbConstants._ID,
                 DbConstants.TABLE_TITLE,
-                DbConstants.TABLE_DISCRIPTION
+                DbConstants.TABLE_DESCRIPTION,
+                DbConstants.TABLE_URI
         };
 
-        // Filter results WHERE "title" = 'My Title'
-        String selection = DbConstants.TABLE_TITLE + " = ?";
-        String[] selectionArgs = {"My Title"};
+        // Filter results WHERE "title" = titleFilter
+        String selection = DbConstants.TABLE_TITLE + " like ?";
+        String[] selectionArgs = {"%" + titleFilter + "%"};
 
         // How you want the results sorted in the resulting Cursor
         String sortOrder =
-                DbConstants.TABLE_DISCRIPTION + " DESC";
+                DbConstants.TABLE_TITLE + " DESC";
 
         Cursor cursor = database.query(
                 DbConstants.TABLE_NAME,   // The table to query
@@ -74,13 +81,33 @@ public class DbManager {
         );
 
         while (cursor.moveToNext()) {
-            String itemId = cursor.getString(cursor.getColumnIndex(DbConstants.TABLE_TITLE));
-            dbList.add(itemId);
+            Note note = new Note();
+            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(DbConstants._ID));
+            @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex(DbConstants.TABLE_TITLE));
+            @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex(DbConstants.TABLE_DESCRIPTION));
+            @SuppressLint("Range") String uri = cursor.getString(cursor.getColumnIndex(DbConstants.TABLE_URI));
+            note.setId(id);
+            note.setTitle(title);
+            note.setDescription(description);
+            note.setUri(uri);
+            dbList.add(note);
         }
 
         cursor.close();
         return dbList;
     }
 
+    public void deleteValues(int id) {
+        String selection = DbConstants._ID + " = " + id;
+        database.delete(DbConstants.TABLE_NAME, selection, null);
+    }
 
+    public void updateValues(int id, String title, String description, String uri) {
+        String selection = DbConstants._ID + " = " + id;
+        ContentValues values = new ContentValues();
+        values.put(DbConstants.TABLE_TITLE, title);
+        values.put(DbConstants.TABLE_DESCRIPTION, description);
+        values.put(DbConstants.TABLE_URI, uri);
+        database.update(DbConstants.TABLE_NAME,values, selection, null);
+    }
 }

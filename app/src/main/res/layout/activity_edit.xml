@@ -4,22 +4,76 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_700"
+    android:background="@color/light_blue"
+    android:visibility="visible"
     tools:context=".EditActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/imageLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintEnd_toEndOf="@+id/editTitle"
+        app:layout_constraintStart_toStartOf="@+id/editTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="gone">
+
+        <ImageView
+            android:id="@+id/newImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@android:drawable/editbox_background"
+            android:contentDescription="TODO"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageButton
+            android:id="@+id/changePictureButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="TODO"
+            android:onClick="onClickChangeImage"
+            app:layout_constraintEnd_toEndOf="@+id/newImage"
+            app:layout_constraintTop_toTopOf="@+id/newImage"
+            app:srcCompat="@android:drawable/ic_menu_edit"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/deletePictureButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="TODO"
+            android:onClick="onClickDeleteImage"
+            app:layout_constraintBottom_toBottomOf="@+id/newImage"
+            app:layout_constraintEnd_toEndOf="@+id/newImage"
+            app:srcCompat="@android:drawable/ic_menu_delete"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <EditText
         android:id="@+id/editTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:autofillHints=""
+        android:autofillHints="testHint"
         android:background="@android:drawable/editbox_background"
         android:ems="10"
         android:gravity="top"
         android:hint="@string/Title"
-        android:hintTextColor="#00838F"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:padding="8dp"
@@ -27,7 +81,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageLayout" />
 
     <EditText
         android:id="@+id/editDescription"
@@ -37,13 +91,12 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:autofillHints=""
+        android:autofillHints="testHint"
         android:background="@android:drawable/editbox_background"
         android:ems="10"
         android:gravity="top"
         android:hint="@string/Description"
-        android:hintTextColor="#00838F"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine|textPersonName"
         android:padding="8dp"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -58,13 +111,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
+        android:alpha="1"
         android:clickable="true"
+        android:contentDescription="@string/Description"
         android:focusable="true"
         android:onClick="onClickSave"
-        app:backgroundTint="@color/purple_100"
+        app:backgroundTint="@color/pink"
         app:layout_constraintBottom_toBottomOf="@+id/editDescription"
         app:layout_constraintEnd_toEndOf="@+id/editDescription"
         app:srcCompat="@drawable/ic_action_save"
         tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addPictureButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:alpha="1"
+        android:contentDescription="TODO"
+        android:onClick="onClickAddImage"
+        app:backgroundTint="@color/pink"
+        app:layout_constraintBottom_toTopOf="@+id/saveButton"
+        app:layout_constraintEnd_toEndOf="@+id/saveButton"
+        app:srcCompat="@drawable/ic_baseline_image"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintGuide_percent="0.33"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
